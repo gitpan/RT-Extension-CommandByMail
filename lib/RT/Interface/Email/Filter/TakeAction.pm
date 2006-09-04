@@ -3,7 +3,7 @@ package RT::Interface::Email::Filter::TakeAction;
 use warnings;
 use strict;
 
-use RT::Interface::Email;
+use RT::Interface::Email qw(ParseCcAddressesFromHead);
 
 our @REGULAR_ATTRIBUTES = qw(Queue Owner Subject Status Priority FinalPriority);
 our @TIME_ATTRIBUTES    = qw(TimeWorked TimeLeft TimeEstimated);
@@ -115,17 +115,24 @@ message.
 
 =head3 Custom field values
 
-Manage custom field values. Could be used multiple times.
+Manage custom field values. Could be used multiple times.  (The curly braces
+are literal.)
 
-    CustomField.{C<CFName>}: <custom field value>
-    AddCustomField.{C<CFName>}: <custom field value>
-    DelCustomField.{C<CFName>}: <custom field value>
+    CustomField.{<CFName>}: <custom field value>
+    AddCustomField.{<CFName>}: <custom field value>
+    DelCustomField.{<CFName>}: <custom field value>
 
 Short forms:
 
-    CF.{C<CFName>}: <custom field value>
-    AddCF.{C<CFName>}: <custom field value>
-    DelCF.{C<CFName>}: <custom field value>
+    CF.{<CFName>}: <custom field value>
+    AddCF.{<CFName>}: <custom field value>
+    DelCF.{<CFName>}: <custom field value>
+
+=cut
+
+=head2 GetCurrentUser
+
+Returns a CurrentUser object.  Also performs all the commands.
 
 =cut
 
@@ -169,8 +176,11 @@ sub GetCurrentUser {
     }
 
     my @items;
+    my $found_pseudoheaders = 0;
     foreach my $line (@content) {
+        next if $line =~ /^\s*$/ && ! $found_pseudoheaders;
         last if $line !~ /^(?:(\S+)\s*?:\s*?(.*)\s*?|)$/;
+        $found_pseudoheaders = 1;
         push( @items, $1 => $2 );
     }
     my %cmds;
@@ -219,6 +229,13 @@ sub GetCurrentUser {
             next unless defined $cmds{ lc $attribute };
             next if $ticket_as_user->$attribute() eq $cmds{ lc $attribute };
 
+            # canonicalize owner -- accept an e-mail address
+            if ( $attribute eq 'Owner' && $cmds{ lc $attribute } =~ /\@/ ) {
+                my $user = RT::User->new($RT::SystemUser);
+                $user->LoadByEmail( $cmds{ lc $attribute } );
+                $cmds{ lc $attribute } = $user->Name if $user->id;
+            }
+
             _SetAttribute(
                 $ticket_as_user,        $attribute,
                 $cmds{ lc $attribute }, \%results
@@ -248,24 +265,30 @@ sub GetCurrentUser {
                 $args{'Ticket'}->$method->MemberEmailAddresses;
             } ];
             my ($add, $del) = _CompileAdditiveForUpdate( %tmp );
-            foreach ( @$del ) {
+            foreach my $text ( @$del ) {
+                my $user = RT::User->new($RT::SystemUser);
+                $user->LoadByEmail($text) if $text =~ /\@/;
+                $user->Load($text) unless $user->id;
                 my ( $val, $msg ) = $ticket_as_user->DeleteWatcher(
                     Type  => $type,
-                    Email => $_,
+                    PrincipalId => $user->PrincipalId,
                 );
                 push @{ $results{ 'Del'. $type } }, {
-                    value   => $_,
+                    value   => $text,
                     result  => $val,
                     message => $msg
                 };
             }
-            foreach ( @$add ) {
+            foreach my $text ( @$add ) {
+                my $user = RT::User->new($RT::SystemUser);
+                $user->LoadByEmail($text) if $text =~ /\@/;
+                $user->Load($text) unless $user->id;
                 my ( $val, $msg ) = $ticket_as_user->AddWatcher(
                     Type  => $type,
-                    Email => $_,
+                    PrincipalId => $user->PrincipalId,
                 );
                 push @{ $results{ 'Add'. $type } }, {
-                    value   => $_,
+                    value   => $text,
                     result  => $val,
                     message => $msg
                 };
@@ -274,8 +297,15 @@ sub GetCurrentUser {
 
         {
             my $time_taken = 0;
-            $time_taken = $cmds{'timeworked'} || 0
-                if grep $_ eq 'TimeWorked', @TIME_ATTRIBUTES;
+            if (grep $_ eq 'TimeWorked', @TIME_ATTRIBUTES) {
+                if (ref $cmds{'timeworked'}) { 
+                    map { $time_taken += ($_ || 0) }  @{ $cmds{'timeworked'} };
+                    $RT::Logger->debug("Time taken: $time_taken");
+                }
+                else {
+                    $time_taken = $cmds{'timeworked'} || 0;
+                }
+            }
 
             my $method = ucfirst $args{'Action'};
             my ($status, $msg) = $ticket_as_user->$method(
@@ -392,18 +422,33 @@ sub GetCurrentUser {
     } else {
 
         my %create_args = ();
-        foreach my $attr (@REGULAR_ATTRIBUTES, @TIME_ATTRIBUTES) {
-            next unless exists $cmds{ lc $attr };
-            $create_args{$attr} = $cmds{ lc $attr };
+        foreach my $attribute (@REGULAR_ATTRIBUTES, @TIME_ATTRIBUTES) {
+            next unless exists $cmds{ lc $attribute };
+
+            # canonicalize owner -- accept an e-mail address
+            if ( $attribute eq 'Owner' && $cmds{ lc $attribute } =~ /\@/ ) {
+                my $user = RT::User->new($RT::SystemUser);
+                $user->LoadByEmail( $cmds{ lc $attribute } );
+                $cmds{ lc $attribute } = $user->Name if $user->id;
+            }
+
+            if ( $attribute eq 'TimeWorked' && ref $cmds{ lc $attribute } ) {
+                my $time_taken = 0;
+                map { $time_taken += ($_ || 0) }  @{ $cmds{'timeworked'} };
+                $cmds{'timeworked'} = $time_taken;
+                $RT::Logger->debug("Time taken on create: $time_taken");
+            }
+
+            $create_args{$attribute} = $cmds{ lc $attribute };
         }
-        foreach my $attr (@DATE_ATTRIBUTES) {
-            next unless exists $cmds{ lc $attr };
+        foreach my $attribute (@DATE_ATTRIBUTES) {
+            next unless exists $cmds{ lc $attribute };
             my $date = RT::Date->new( $args{'CurrentUser'} );
             $date->Set(
                 Format => 'unknown',
-                Value  => $cmds{ lc $attr }
+                Value  => $cmds{ lc $attribute }
             );
-            $create_args{$attr} = $date->ISO;
+            $create_args{$attribute} = $date->ISO;
         }
 
         # Canonicalize links
@@ -590,7 +635,7 @@ sub _CheckCommand {
         return 1 if grep $cmd eq lc $_, @LINK_ATTRIBUTES, @WATCHER_ATTRIBUTES;
     }
 
-    return (0, "Command '$cmd' is unkown");
+    return (0, "Command '$cmd' is unknown");
 }
 
 sub _ReportResults {
@@ -621,6 +666,7 @@ sub _ReportResults {
         Subject     => "Extended mailgate error",
         Explanation => $msg,
         MIMEObj     => $args{'Message'},
+        Attach      => $args{'Message'}->as_string,
     );
     return;
 }

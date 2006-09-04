@@ -23,12 +23,14 @@ patch/command_by_email-0.1-RT-3.4.3.patch
 patch/command_by_email-0.1-RT-3.4.4.patch
 patch/command_by_email-0.1-RT-3.4.5.patch
 patch/command_by_email-0.1-RT-3.6.0.patch
+patch/errors_in_reply_to-RT-3.6.1.patch
 README
 SIGNATURE
 t/00.load.t
 t/01.internals.t
 t/02.create.t
 t/03.update.t
+t/04.send.t
 t/pod-coverage.t
 t/pod.t
 t/utils.pl
