@@ -152,7 +152,8 @@ sub GetCurrentUser {
         $RT::Logger->error(
             "Filter::TakeAction executed when "
             ."CurrentUser (actor) is not authorized. "
-            ."Most probably you want to add Auth::MailFrom plugin before."
+            ."Most probably you want to add Auth::MailFrom plugin before "
+            ."Filter::TakeAction in the \@MailPlugins config."
         );
         return ( $args{'CurrentUser'}, $args{'AuthLevel'} );
     }
@@ -163,6 +164,23 @@ sub GetCurrentUser {
         return ( $args{'CurrentUser'}, $args{'AuthLevel'} );
     }
 
+    # If only a particular group may perform commands by mail,
+    # bail out
+    my $new_config = RT->can('Config') && RT->Config->can('Get');
+    my $group_id = $new_config
+                 ? RT->Config->Get('CommandByMailGroup')
+                 : $RT::CommandByMailGroup;
+
+    if (defined $group_id) {
+        my $group = RT::Group->new($args{'CurrentUser'});
+        $group->Load($group_id);
+
+        if (!$group->HasMemberRecursively($args{'CurrentUser'}->PrincipalObj)) {
+            return ($args{'CurrentUser'}, $args{'AuthLevel'});
+        }
+    }
+
+    # find the content
     my @content;
     my @parts = $args{'Message'}->parts_DFS;
     foreach my $part (@parts) {

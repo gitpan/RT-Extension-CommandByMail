@@ -1,6 +1,6 @@
 package RT::Extension::CommandByMail;
 
-our $VERSION = '0.06';
+our $VERSION = '0.07_01';
 
 1;
 __END__
@@ -36,6 +36,11 @@ that applies to the RT in general also applies to the extension.
 Read L<INSTALL>. Note that you B<must patch> RT
 to use this extension, so read the file.
 
+=head2 C<$CommandByMailGroup>
+
+You may set a C<$CommandByMailGroup> to a particular group ID in RT_SiteConfig.
+If set, only members of this group may perform commands by mail.
+
 =head1 CAVEATS
 
 This extension is incomatible with C<UnsafeEmailCommands> RT option.
@@ -44,10 +49,12 @@ This extension is incomatible with C<UnsafeEmailCommands> RT option.
 
 Jesse Vincent  C<< <jesse@bestpractical.com> >>
 Ruslan U. Zakirov  C<< <ruz@bestpractical.com> >>
+Kevin Falcone C<< <falcone@bestpractical.com> >>
+Shawn Moore C<< <sartak@bestpractical.com> >>
 
 =head1 LICENCE AND COPYRIGHT
 
-Copyright (c) 2006, Best Practical Solutions, LLC.  All rights reserved.
+Copyright (c) 2006-2008, Best Practical Solutions, LLC.  All rights reserved.
 
 This module is free software; you can redistribute it and/or
 modify it under the same terms as Perl itself. See L<perlartistic>.
