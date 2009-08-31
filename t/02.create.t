@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 140;
+use Test::More tests => 147;
 
 BEGIN { require 't/utils.pl' }
 RT::Init();
@@ -266,6 +266,30 @@ END
     is($obj->FirstCustomFieldValue($cf_name), 'foo', 'correct cf value' );
 }
 
+diag("set custom fields with whitespace on create") if $ENV{'TEST_VERBOSE'};
+{
+    require RT::CustomField;
+    my $cf = RT::CustomField->new( $RT::SystemUser );
+    my $cf_name = 'te st'.rand $$;
+    $cf->Create( Name => $cf_name, Queue => 0, Type => 'Freeform' );
+    ok($cf->id, "created global CF");
+
+    my $text = <<END;
+Subject: test
+From: root\@localhost
+
+CustomField.{$cf_name}: foo
+
+test
+END
+    my $id = create_ticket_via_gate( $text );
+    ok($id, "created ticket");
+    my $obj = RT::Ticket->new( $RT::SystemUser );
+    $obj->Load( $id );
+    is($obj->id, $id, "loaded ticket");
+    is($obj->FirstCustomFieldValue($cf_name), 'foo', 'correct cf value' );
+}
+
 diag("accept watcher as username and email address") if $ENV{'TEST_VERBOSE'};
 {
     require RT::Queue;
@@ -275,6 +299,12 @@ diag("accept watcher as username and email address") if $ENV{'TEST_VERBOSE'};
     my $queue = RT::Queue->new($RT::SystemUser);
     my ($id, $msg) = $queue->Create( Name => $queue_name );
     ok($id, "Created queue '$queue_name'? $msg");
+
+    require RT::CustomField;
+    my $cf = RT::CustomField->new( $RT::SystemUser );
+    my $cf_name = 'test'.rand $$;
+    $cf->Create( Name => $cf_name, Queue => $queue->Id, Type => 'Freeform' );
+    ok($cf->id, "created queue CF");
 
     my $user_name = "WatcherCommandTest$$";
     my $user_email = "watchercommand$$\@example.com";
@@ -298,6 +328,7 @@ From: root\@localhost
 
 Queue: $queue_name
 Owner: $owner
+CF.{$cf_name}: fro'b
 
 owner test
 END
@@ -309,6 +340,7 @@ END
         ok( $ticket->IsWatcher( Type => 'Owner', 
             PrincipalId => $user->PrincipalId ), "set '$owner' as Owner"
         );
+        is($ticket->FirstCustomFieldValue($cf_name), "fro'b", 'correct cf value' );
     }
 
     foreach my $cc ( $user_name, $user_email ) {

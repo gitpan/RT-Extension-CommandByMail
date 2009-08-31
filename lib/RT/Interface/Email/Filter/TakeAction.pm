@@ -176,9 +176,12 @@ sub GetCurrentUser {
         $group->Load($group_id);
 
         if (!$group->HasMemberRecursively($args{'CurrentUser'}->PrincipalObj)) {
+            $RT::Logger->debug("CurrentUser not in CommandByMailGroup");
             return ($args{'CurrentUser'}, $args{'AuthLevel'});
         }
     }
+
+    $RT::Logger->debug("Running CommandByMail as ".$args{'CurrentUser'}->UserObj->Name);
 
     # find the content
     my @content;
@@ -187,7 +190,7 @@ sub GetCurrentUser {
         my $body = $part->bodyhandle or next;
 
         #if it looks like it has pseudoheaders, that's our content
-        if ( $body->as_string =~ /^(?:\S+):/m ) {
+        if ( $body->as_string =~ /^(?:\S+)(?:{.*})?:/m ) {
             @content = $body->as_lines;
             last;
         }
@@ -197,15 +200,17 @@ sub GetCurrentUser {
     my $found_pseudoheaders = 0;
     foreach my $line (@content) {
         next if $line =~ /^\s*$/ && ! $found_pseudoheaders;
-        last if $line !~ /^(?:(\S+)\s*?:\s*?(.*)\s*?|)$/;
+        last if $line !~ /^(?:(\S+(?:{.*})?)\s*?:\s*?(.*)\s*?|)$/;
         $found_pseudoheaders = 1;
         push( @items, $1 => $2 );
+        $RT::Logger->debug("Found pseudoheader: $1 => $2");
     }
     my %cmds;
     while ( my $key = _CanonicalizeCommand( lc shift @items ) ) {
         my $val = shift @items;
         # strip leading and trailing spaces
         $val =~ s/^\s+|\s+$//g;
+        $RT::Logger->debug("Got command $key => $val");
 
         if ( exists $cmds{$key} ) {
             $cmds{$key} = [ $cmds{$key} ] unless ref $cmds{$key};
@@ -241,6 +246,7 @@ sub GetCurrentUser {
     # If we're updating.
     if ( $args{'Ticket'}->id ) {
         $ticket_as_user->Load( $args{'Ticket'}->id );
+        $RT::Logger->debug("Updating Ticket ".$ticket_as_user->Id." in Queue ".$queue->Name);
 
         # we set status later as correspond can reopen ticket
         foreach my $attribute (grep !/^(Status|TimeWorked)/, @REGULAR_ATTRIBUTES, @TIME_ATTRIBUTES) {
@@ -259,6 +265,12 @@ sub GetCurrentUser {
                 $cmds{ lc $attribute }, \%results
             );
         }
+
+        # we want the queue the ticket is currently in, not the queue
+        # that was passed to rt-mailgate, otherwise we can't find the
+        # proper set of Custom Fields.  But, we have to do this after 
+        # we potentially update the Queue from @REGULAR_ATTRIBUTES
+        $queue = $ticket_as_user->QueueObj();
 
         foreach my $attribute (@DATE_ATTRIBUTES) {
             next unless ( $cmds{ lc $attribute } );
