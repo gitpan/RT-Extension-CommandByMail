@@ -1,6 +1,6 @@
 package RT::Extension::CommandByMail;
 
-our $VERSION = '0.08_01';
+our $VERSION = '0.09';
 
 1;
 __END__
@@ -25,6 +25,9 @@ This extension allows you to manage tickets via email interface.
 You put commands into beginning of a mail and extension applies
 them. See the list of commands in the
 L<RT::Interface::Email::Filter::TakeAction> docs.
+
+CAVEAT: commands are line oriented, so you can't expand to multiple
+lines for each command, i.e. values can't contains new lines.
 
 =head1 SECURITY
 
