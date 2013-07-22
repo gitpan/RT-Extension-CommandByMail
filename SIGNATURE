@@ -1,5 +1,5 @@
 This file contains message digests of all files listed in MANIFEST,
-signed via the Module::Signature module, version 0.66.
+signed via the Module::Signature module, version 0.69.
 
 To verify the content in this distribution, first make sure you have
 Module::Signature installed, then type:
@@ -14,46 +14,42 @@ not run its Makefile.PL or Build.PL.
 -----BEGIN PGP SIGNED MESSAGE-----
 Hash: SHA1
 
-SHA1 ff280a032ecb7450f205e55017d7fb46e593885e Changes
-SHA1 76014226d8a0d93706706227135f5e90b6b4e240 INSTALL
-SHA1 5fd808fb4cf9a7406dbe7fe476b4d59ec23394ff MANIFEST
-SHA1 aba71e346a37e25f63a8e18b5ced3d0f8f40b7ab META.yml
-SHA1 0a1f890ac74b40abf3e5f1cec57e3fd9d316ed4d Makefile.PL
-SHA1 abc00eba575f6b160ae15e11666ef1cb7db2ebd1 README
-SHA1 20c73697e1713638140c719d8eaa19a275ed43a5 inc/Module/AutoInstall.pm
-SHA1 7b4ae50ebac72d20761171c4c2b50c206344ea40 inc/Module/Install.pm
-SHA1 d001b4b9a48395a8c4134b234a0e1789138427c5 inc/Module/Install/AuthorTests.pm
-SHA1 c3cb159acd7618ea662f28deb0d0bf8f24742ebb inc/Module/Install/AutoInstall.pm
-SHA1 d9fe55a427fe2fd75b5029afeeaa61b592e07f79 inc/Module/Install/Base.pm
-SHA1 62d3922826d9f89f20c185e7031ac8f028504745 inc/Module/Install/Can.pm
-SHA1 dc809f64fb70a26b069a36f8d3d353d520dbb7e1 inc/Module/Install/Fetch.pm
-SHA1 d859f2d8048708f16b5fd92f54c988a3c4c1ae30 inc/Module/Install/Include.pm
-SHA1 73ab91490a628452cc140db72ef9d13a1326d211 inc/Module/Install/Makefile.pm
-SHA1 8ce3f2b414e4617e6233dd4ba10830f8c5d672ec inc/Module/Install/Metadata.pm
-SHA1 086821cf681da29d7a7e94e8a6fe6cce7e14f00f inc/Module/Install/RTx.pm
+SHA1 af8d9a2080daafd797eb4346cc872142b52f40ad Changes
+SHA1 9f4b3efd88054da3bace705044c60129d38fd9ff INSTALL
+SHA1 1d83efc410a240f28fe655e1d1ea6f6eda4fa78f MANIFEST
+SHA1 8d35248c9a7f9612110aba7daa6b233a2c7390cc META.yml
+SHA1 34b55b30bb3d18064b223e44a53e9dd7cae4aca9 Makefile.PL
+SHA1 62bde0f18e4a4ae4fe4b62be62d907a6e50f3434 README
+SHA1 06c410f05488c1612ed66b06d3a86b2580581e4a inc/Module/AutoInstall.pm
+SHA1 8a924add836b60fb23b25c8506d45945e02f42f4 inc/Module/Install.pm
+SHA1 61ab1dd37e33ddbe155907ce51df8a3e56ac8bbf inc/Module/Install/AutoInstall.pm
+SHA1 2d0fad3bf255f8c1e7e1e34eafccc4f595603ddc inc/Module/Install/Base.pm
+SHA1 f0e01fff7d73cd145fbf22331579918d4628ddb0 inc/Module/Install/Can.pm
+SHA1 7328966e4fda0c8451a6d3850704da0b84ac1540 inc/Module/Install/Fetch.pm
+SHA1 66d3d335a03492583a3be121a7d888f63f08412c inc/Module/Install/Include.pm
+SHA1 b62ca5e2d58fa66766ccf4d64574f9e1a2250b34 inc/Module/Install/Makefile.pm
+SHA1 1aa925be410bb3bfcd84a16985921f66073cc1d2 inc/Module/Install/Metadata.pm
+SHA1 5f63805513cf3214069df32f21457c674dda05cc inc/Module/Install/RTx.pm
 SHA1 13c903897bad7f0fdd7871a4a0182ff62dfbefd5 inc/Module/Install/Substitute.pm
-SHA1 3b0acd2eeac93a0afe48120f5648f0db362e5bbf inc/Module/Install/Win32.pm
-SHA1 f08924f051e623f8e09fa6a121993c4a9cf7d9eb inc/Module/Install/WriteAll.pm
-SHA1 d50d3167ac9805cf031e548239db677b7c929bbc lib/RT/Extension/CommandByMail.pm
-SHA1 ddd961301038e14d771e2a18d21d5aef6e3c3a94 lib/RT/Interface/Email/Filter/TakeAction.pm
+SHA1 e4196994fa75e98bdfa2be0bdeeffef66de88171 inc/Module/Install/Win32.pm
+SHA1 c3a6d0d5b84feb3280622e9599e86247d58b0d18 inc/Module/Install/WriteAll.pm
+SHA1 65f35a145ffadbd90f6cfbbee6b251cf15feeaa0 lib/RT/Extension/CommandByMail.pm
+SHA1 0140773f010565116e6d931d346ac219d5924479 lib/RT/Extension/CommandByMail/Test.pm
+SHA1 4c65145da80bd98a5b457ebb3a802cd2f269349d lib/RT/Interface/Email/Filter/TakeAction.pm
 SHA1 cf2c3c834f624767534204ed9e08a8f27d976fff patch/command_by_email-0.1-RT-3.4.2.patch
 SHA1 7b0a3b9f38d5214c10030d9d840a94e7511500f3 patch/command_by_email-0.1-RT-3.4.3.patch
 SHA1 7b0a3b9f38d5214c10030d9d840a94e7511500f3 patch/command_by_email-0.1-RT-3.4.4.patch
 SHA1 4d86236d1f46c9ef07b047d54e7782d0199349db patch/command_by_email-0.1-RT-3.4.5.patch
 SHA1 698501dd38dfed7330b62eb4f5e39c51ca434330 patch/command_by_email-0.1-RT-3.6.0.patch
 SHA1 37c72e9eb8010b1437af329e2f7e7b06377d39aa patch/errors_in_reply_to-RT-3.6.1.patch
-SHA1 a0ee526a38c9c149072dea45056af97dd40272a7 xt/00.load.t
-SHA1 8cf09038cb18a7f8c820b34887f18f8fbb8a26a3 xt/01.internals.t
-SHA1 113fd9d9bf3f2e3f46764bf80907b45dfee1c109 xt/02.create.t
-SHA1 2e39f90f9a9c3db520e661e9c8474e9cc6f277d5 xt/03.update.t
-SHA1 33c45639ea0739f15ee0f3ddbf5ea77f6ebf259c xt/04.send.t
-SHA1 6da39b48ce64b584e4c3274bff96fc76ff484820 xt/pod-coverage.t
-SHA1 0190346d7072d458c8a10a45c19f86db641dcc48 xt/pod.t
-SHA1 297292480c5eff44ffa62a72573e031cf146bfbf xt/utils.pl
+SHA1 5853a27f0190f73f066aded144b78e2301a00451 t/create.t
+SHA1 77205de650414cb7e6e2f23c827810bfa297126a t/internals.t
+SHA1 f6492d857343489fb65dfb174b3cbe0b981fd6a2 t/txn-cfs.t
+SHA1 6a5d1de463b18e24db5b351e29bcfd46ba188fd1 t/update.t
 -----BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.4.10 (Darwin)
+Version: GnuPG v1.4.11 (GNU/Linux)
 
-iEYEARECAAYFAk45tR0ACgkQ0+gKWp5CJQrnaQCdEuhqrH1UnH6aJD6gECC0fVPG
-iN4AoJGorAAXEImFisV25MwKvBkB23+U
-=mMTQ
+iD8DBQFR7XVyHdv9ZfNcOAcRAoqBAKCbjLcyjez/DoEb8+OBwbEZmDL4bQCcDQjY
+1qxzstKAfpRIAq+AtxMlhvs=
+=/rm4
 -----END PGP SIGNATURE-----

@@ -1,6 +1,7 @@
+use 5.008003;
 package RT::Extension::CommandByMail;
 
-our $VERSION = '0.10';
+our $VERSION = '0.12';
 
 1;
 __END__
@@ -46,7 +47,7 @@ If set, only members of this group may perform commands by mail.
 
 =head1 CAVEATS
 
-This extension is incomatible with C<UnsafeEmailCommands> RT option.
+This extension is incompatible with C<UnsafeEmailCommands> RT option.
 
 =head1 AUTHOR
 

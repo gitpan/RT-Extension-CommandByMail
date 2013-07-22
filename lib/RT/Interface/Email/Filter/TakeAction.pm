@@ -18,8 +18,8 @@ RT::Interface::Email::Filter::TakeAction - Change metadata of ticket via email
 
 =head1 DESCRIPTION
 
-This extension parse content of incomming messages for list commands. Format
-of commands is:
+This extension parses the body and headers of incoming messages for
+list commands. Format of commands is:
 
     Command: value
     Command: value
@@ -128,6 +128,19 @@ Short forms:
     AddCF.{<CFName>}: <custom field value>
     DelCF.{<CFName>}: <custom field value>
 
+=head3 Transaction Custom field values
+
+Manage custom field values of transactions. Could be used multiple times.  (The curly braces
+are literal.)
+
+    TransactionCustomField.{<CFName>}: <custom field value>
+
+Short forms:
+
+    TxnCustomField.{<CFName>}: <custom field value>
+    TransactionCF.{<CFName>}: <custom field value>
+    TxnCF.{<CFName>}: <custom field value>
+
 =cut
 
 =head2 GetCurrentUser
@@ -183,6 +196,10 @@ sub GetCurrentUser {
 
     $RT::Logger->debug("Running CommandByMail as ".$args{'CurrentUser'}->UserObj->Name);
 
+    my $headername = $new_config
+	    ? RT->Config->Get('CommandByMailHeader')
+	    : $RT::CommandByMailHeader;
+
     # find the content
     my @content;
     my @parts = $args{'Message'}->parts_DFS;
@@ -196,17 +213,24 @@ sub GetCurrentUser {
         }
     }
 
+    if (defined $headername) {
+	    unshift @content, $args{'Message'}->head->get_all($headername);
+    }
+
     my @items;
     my $found_pseudoheaders = 0;
     foreach my $line (@content) {
         next if $line =~ /^\s*$/ && ! $found_pseudoheaders;
         last if $line !~ /^(?:(\S+(?:{.*})?)\s*?:\s*?(.*)\s*?|)$/;
+        last if not defined $1 and $found_pseudoheaders;
+        next if not defined $1;
+
         $found_pseudoheaders = 1;
         push( @items, $1 => $2 );
         $RT::Logger->debug("Found pseudoheader: $1 => $2");
     }
     my %cmds;
-    while ( my $key = _CanonicalizeCommand( lc shift @items ) ) {
+    while ( my $key = _CanonicalizeCommand( shift @items ) ) {
         my $val = shift @items;
         # strip leading and trailing spaces
         $val =~ s/^\s+|\s+$//g;
@@ -242,6 +266,8 @@ sub GetCurrentUser {
     if ( !$queue->id ) {
         $queue->Load( $args{'Queue'}->id );
     }
+
+    my $transaction;
 
     # If we're updating.
     if ( $args{'Ticket'}->id ) {
@@ -282,7 +308,7 @@ sub GetCurrentUser {
             );
             _SetAttribute( $ticket_as_user, $attribute, $date->ISO,
                 \%results );
-            $results{ lc $attribute }->{value} = $cmds{ lc $attribute };
+            $results{ $attribute }->{value} = $cmds{ lc $attribute };
         }
 
         foreach my $type ( @WATCHER_ATTRIBUTES ) {
@@ -315,7 +341,10 @@ sub GetCurrentUser {
                 $user->Load($text) unless $user->id;
                 my ( $val, $msg ) = $ticket_as_user->AddWatcher(
                     Type  => $type,
-                    PrincipalId => $user->PrincipalId,
+                    $user->id
+                        ? (PrincipalId => $user->PrincipalId)
+                        : (Email => $text)
+                    ,
                 );
                 push @{ $results{ 'Add'. $type } }, {
                     value   => $text,
@@ -338,7 +367,7 @@ sub GetCurrentUser {
             }
 
             my $method = ucfirst $args{'Action'};
-            my ($status, $msg) = $ticket_as_user->$method(
+            (my $status, my $msg, $transaction) = $ticket_as_user->$method(
                 TimeTaken => $time_taken,
                 MIMEObj   => $args{'Message'},
             );
@@ -442,13 +471,6 @@ sub GetCurrentUser {
             );
         }
 
-        _ReportResults(
-            Ticket => $args{'Ticket'},
-            Results => \%results,
-            Message => $args{'Message'}
-        );
-        return ( $args{'CurrentUser'}, -2 );
-
     } else {
 
         my %create_args = ();
@@ -545,13 +567,41 @@ sub GetCurrentUser {
 
             return ($args{'CurrentUser'}, $args{'AuthLevel'});
         }
+        $transaction = RT::Transaction->new( $ticket_as_user->CurrentUser );
+        $transaction->Load( $txn_id );
 
-        _ReportResults( Results => \%results, Message => $args{'Message'} );
-
-        # now that we've created a ticket, we abort so we don't create another.
-        $args{'Ticket'}->Load( $id );
-        return ( $args{'CurrentUser'}, -2 );
     }
+
+    if ( $transaction && $transaction->id ) {
+        my $custom_fields = $transaction->CustomFields;
+        while ( my $cf = $custom_fields->Next ) {
+            my $cmd = 'TransactionCustomField{'. $cf->Name .'}';
+            my @values = ($cmds{ lc $cmd });
+            @values = @{ $values[0] } if ref $values[0] eq 'ARRAY';
+            @values = grep defined && length, @values;
+            next unless @values;
+
+            foreach my $value ( @values ) {
+                my ($status, $msg) = $transaction->AddCustomFieldValue(
+                    Field => $cf->Name, Value => $value,
+                );
+                push @{ $results{ $cmd } ||= [] }, {
+                    value => $value, result => $status, message => $msg,
+                };
+            }
+        }
+    }
+
+    _ReportResults(
+        Ticket => $args{'Ticket'},
+        Results => \%results,
+        Message => $args{'Message'},
+    );
+
+    # make sure ticket is loaded
+    $args{'Ticket'}->Load( $transaction->ObjectId );
+
+    return ( $args{'CurrentUser'}, -2 );
 }
 
 sub _ParseAdditiveCommand {
@@ -648,14 +698,19 @@ sub _SetAttribute {
 
 sub _CanonicalizeCommand {
     my $key = shift;
+    return $key unless defined $key;
+
+    $key = lc $key;
     # CustomField commands
     $key =~ s/^(add|del|)c(?:ustom)?-?f(?:ield)?\.?[({\[](.*)[)}\]]$/$1customfield{$2}/i;
+    $key =~ s/^(?:transaction|txn)c(?:ustom)?-?f(?:ield)?\.?[({\[](.*)[)}\]]$/transactioncustomfield{$1}/i;
     return $key;
 }
 
 sub _CheckCommand {
     my ($cmd, $val) = (lc shift, shift);
     return 1 if $cmd =~ /^(add|del|)customfield{.*}$/i;
+    return 1 if $cmd =~ /^transactioncustomfield{.*}$/i;
     if ( grep $cmd eq lc $_, @REGULAR_ATTRIBUTES, @TIME_ATTRIBUTES, @DATE_ATTRIBUTES ) {
         return 1 unless ref $val;
         return (0, "Command '$cmd' doesn't support multiple values");
@@ -676,7 +731,7 @@ sub _ReportResults {
     my %args = ( Ticket => undef, Message => undef, Results => {}, @_ );
 
     my $msg = '';
-    unless ( $args{'Ticket'} ) {
+    unless ( $args{'Ticket'} && $args{'Ticket'}->id ) {
         $msg .= $args{'Results'}{'Create'}{'message'} || '';
         $msg .= "\n" if $msg;
         delete $args{'Results'}{'Create'};
