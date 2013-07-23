@@ -14,10 +14,10 @@ not run its Makefile.PL or Build.PL.
 -----BEGIN PGP SIGNED MESSAGE-----
 Hash: SHA1
 
-SHA1 af8d9a2080daafd797eb4346cc872142b52f40ad Changes
-SHA1 9f4b3efd88054da3bace705044c60129d38fd9ff INSTALL
+SHA1 8905ee729a1aa0b1a6f3282407f00b18b2909723 Changes
+SHA1 4fee7fd93c79a4357aac999bfccc64244701cb58 INSTALL
 SHA1 1d83efc410a240f28fe655e1d1ea6f6eda4fa78f MANIFEST
-SHA1 8d35248c9a7f9612110aba7daa6b233a2c7390cc META.yml
+SHA1 fba452485ebce54968586ff575727d7a9bd3a66d META.yml
 SHA1 34b55b30bb3d18064b223e44a53e9dd7cae4aca9 Makefile.PL
 SHA1 62bde0f18e4a4ae4fe4b62be62d907a6e50f3434 README
 SHA1 06c410f05488c1612ed66b06d3a86b2580581e4a inc/Module/AutoInstall.pm
@@ -33,9 +33,9 @@ SHA1 5f63805513cf3214069df32f21457c674dda05cc inc/Module/Install/RTx.pm
 SHA1 13c903897bad7f0fdd7871a4a0182ff62dfbefd5 inc/Module/Install/Substitute.pm
 SHA1 e4196994fa75e98bdfa2be0bdeeffef66de88171 inc/Module/Install/Win32.pm
 SHA1 c3a6d0d5b84feb3280622e9599e86247d58b0d18 inc/Module/Install/WriteAll.pm
-SHA1 65f35a145ffadbd90f6cfbbee6b251cf15feeaa0 lib/RT/Extension/CommandByMail.pm
+SHA1 619eb8147de04d7a5a013e596ff4977bea283762 lib/RT/Extension/CommandByMail.pm
 SHA1 0140773f010565116e6d931d346ac219d5924479 lib/RT/Extension/CommandByMail/Test.pm
-SHA1 4c65145da80bd98a5b457ebb3a802cd2f269349d lib/RT/Interface/Email/Filter/TakeAction.pm
+SHA1 5fc8b254199718f2e2997599e4b78f771b579dfe lib/RT/Interface/Email/Filter/TakeAction.pm
 SHA1 cf2c3c834f624767534204ed9e08a8f27d976fff patch/command_by_email-0.1-RT-3.4.2.patch
 SHA1 7b0a3b9f38d5214c10030d9d840a94e7511500f3 patch/command_by_email-0.1-RT-3.4.3.patch
 SHA1 7b0a3b9f38d5214c10030d9d840a94e7511500f3 patch/command_by_email-0.1-RT-3.4.4.patch
@@ -49,7 +49,7 @@ SHA1 6a5d1de463b18e24db5b351e29bcfd46ba188fd1 t/update.t
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1.4.11 (GNU/Linux)
 
-iD8DBQFR7XVyHdv9ZfNcOAcRAoqBAKCbjLcyjez/DoEb8+OBwbEZmDL4bQCcDQjY
-1qxzstKAfpRIAq+AtxMlhvs=
-=/rm4
+iD8DBQFR7xQJHdv9ZfNcOAcRAghZAJ0dAMwFql5xfLeHUASJaazs4NrygwCgqTOq
+KBfdvktQHYb4LH0aRLce5EY=
+=5eC5
 -----END PGP SIGNATURE-----

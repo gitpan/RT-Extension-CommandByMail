@@ -197,12 +197,16 @@ sub GetCurrentUser {
     $RT::Logger->debug("Running CommandByMail as ".$args{'CurrentUser'}->UserObj->Name);
 
     my $headername = $new_config
-	    ? RT->Config->Get('CommandByMailHeader')
-	    : $RT::CommandByMailHeader;
+        ? RT->Config->Get('CommandByMailHeader')
+        : $RT::CommandByMailHeader;
+
+    my $only_headers = $new_config
+        ? RT->Config->Get('CommandByMailOnlyHeaders')
+        : $RT::CommandByMailOnlyHeaders;
 
     # find the content
-    my @content;
-    my @parts = $args{'Message'}->parts_DFS;
+    my @content = ();
+    my @parts = $only_headers ? () : $args{'Message'}->parts_DFS;
     foreach my $part (@parts) {
         my $body = $part->bodyhandle or next;
 
@@ -214,7 +218,7 @@ sub GetCurrentUser {
     }
 
     if (defined $headername) {
-	    unshift @content, $args{'Message'}->head->get_all($headername);
+        unshift @content, $args{'Message'}->head->get_all($headername);
     }
 
     my @items;
