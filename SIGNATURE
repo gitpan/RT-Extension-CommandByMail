@@ -14,10 +14,9 @@ not run its Makefile.PL or Build.PL.
 -----BEGIN PGP SIGNED MESSAGE-----
 Hash: SHA1
 
-SHA1 8905ee729a1aa0b1a6f3282407f00b18b2909723 Changes
-SHA1 4fee7fd93c79a4357aac999bfccc64244701cb58 INSTALL
+SHA1 b28f4aaa781eca9973504bc7e223aab77a8ec149 Changes
 SHA1 1d83efc410a240f28fe655e1d1ea6f6eda4fa78f MANIFEST
-SHA1 fba452485ebce54968586ff575727d7a9bd3a66d META.yml
+SHA1 6af33435d5409616bc23357ec2d379676750d79d META.yml
 SHA1 34b55b30bb3d18064b223e44a53e9dd7cae4aca9 Makefile.PL
 SHA1 62bde0f18e4a4ae4fe4b62be62d907a6e50f3434 README
 SHA1 06c410f05488c1612ed66b06d3a86b2580581e4a inc/Module/AutoInstall.pm
@@ -29,27 +28,21 @@ SHA1 7328966e4fda0c8451a6d3850704da0b84ac1540 inc/Module/Install/Fetch.pm
 SHA1 66d3d335a03492583a3be121a7d888f63f08412c inc/Module/Install/Include.pm
 SHA1 b62ca5e2d58fa66766ccf4d64574f9e1a2250b34 inc/Module/Install/Makefile.pm
 SHA1 1aa925be410bb3bfcd84a16985921f66073cc1d2 inc/Module/Install/Metadata.pm
-SHA1 5f63805513cf3214069df32f21457c674dda05cc inc/Module/Install/RTx.pm
+SHA1 40df6f8d889b52eef379f04af6227f9302b23bf9 inc/Module/Install/RTx.pm
 SHA1 13c903897bad7f0fdd7871a4a0182ff62dfbefd5 inc/Module/Install/Substitute.pm
 SHA1 e4196994fa75e98bdfa2be0bdeeffef66de88171 inc/Module/Install/Win32.pm
 SHA1 c3a6d0d5b84feb3280622e9599e86247d58b0d18 inc/Module/Install/WriteAll.pm
-SHA1 619eb8147de04d7a5a013e596ff4977bea283762 lib/RT/Extension/CommandByMail.pm
+SHA1 3efa21f02473441ba0ad0d50884e0e46bf025d09 lib/RT/Extension/CommandByMail.pm
 SHA1 0140773f010565116e6d931d346ac219d5924479 lib/RT/Extension/CommandByMail/Test.pm
-SHA1 5fc8b254199718f2e2997599e4b78f771b579dfe lib/RT/Interface/Email/Filter/TakeAction.pm
-SHA1 cf2c3c834f624767534204ed9e08a8f27d976fff patch/command_by_email-0.1-RT-3.4.2.patch
-SHA1 7b0a3b9f38d5214c10030d9d840a94e7511500f3 patch/command_by_email-0.1-RT-3.4.3.patch
-SHA1 7b0a3b9f38d5214c10030d9d840a94e7511500f3 patch/command_by_email-0.1-RT-3.4.4.patch
-SHA1 4d86236d1f46c9ef07b047d54e7782d0199349db patch/command_by_email-0.1-RT-3.4.5.patch
-SHA1 698501dd38dfed7330b62eb4f5e39c51ca434330 patch/command_by_email-0.1-RT-3.6.0.patch
-SHA1 37c72e9eb8010b1437af329e2f7e7b06377d39aa patch/errors_in_reply_to-RT-3.6.1.patch
-SHA1 5853a27f0190f73f066aded144b78e2301a00451 t/create.t
+SHA1 ac224bc8ce45f8142c464f8c0be1aaed157a7d98 lib/RT/Interface/Email/Filter/TakeAction.pm
+SHA1 fba23bbc3a2d24ea2a544904396590a4b5700d33 t/create.t
 SHA1 77205de650414cb7e6e2f23c827810bfa297126a t/internals.t
 SHA1 f6492d857343489fb65dfb174b3cbe0b981fd6a2 t/txn-cfs.t
-SHA1 6a5d1de463b18e24db5b351e29bcfd46ba188fd1 t/update.t
+SHA1 e42510cc188df1bf9b9bd36d255d1b5652b91417 t/update.t
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1.4.11 (GNU/Linux)
 
-iD8DBQFR7xQJHdv9ZfNcOAcRAghZAJ0dAMwFql5xfLeHUASJaazs4NrygwCgqTOq
-KBfdvktQHYb4LH0aRLce5EY=
-=5eC5
+iEYEARECAAYFAlJNtPoACgkQMflWJZZAbqCuCgCcD3GQKDtuF/DIX+DE/8JD9Mb7
+XG0AnA3DlcD51AoG3jXBHjz/ruxj7zGP
+=V5pv
 -----END PGP SIGNATURE-----
