@@ -2,8 +2,9 @@ use inc::Module::Install;
 
 #die "This RT Extension will kill your pets and steal your valuables. DO NOT USE IT YET";
 RTx ('RT-Extension-CommandByMail');
-author ('Jesse Vincent <jesse@bestpractical.com>');
+author_from ('lib/RT/Extension/CommandByMail.pm');
 license('perl');
+readme_from('lib/RT/Extension/CommandByMail.pm');
 
 build_requires('Test::More');
 build_requires('IPC::Open2');

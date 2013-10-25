@@ -1,5 +1,5 @@
 This file contains message digests of all files listed in MANIFEST,
-signed via the Module::Signature module, version 0.69.
+signed via the Module::Signature module, version 0.73.
 
 To verify the content in this distribution, first make sure you have
 Module::Signature installed, then type:
@@ -14,11 +14,11 @@ not run its Makefile.PL or Build.PL.
 -----BEGIN PGP SIGNED MESSAGE-----
 Hash: SHA1
 
-SHA1 f14eca5d2f13b7450fc99109b2f1d290b5acb0a2 Changes
-SHA1 1d83efc410a240f28fe655e1d1ea6f6eda4fa78f MANIFEST
-SHA1 d70fae7c077993193ebcd3ad07b03e801911fe13 META.yml
-SHA1 4aa969434af02731784304973f938eddcdda4533 Makefile.PL
-SHA1 62bde0f18e4a4ae4fe4b62be62d907a6e50f3434 README
+SHA1 9bc63d2aa2d479978cfddbf0e5d951fc149070be Changes
+SHA1 02ebb12354ec22970bcd1c90b9ea7b4c82b80725 MANIFEST
+SHA1 34ff99132f6f5396bb27e82d10f5fb4edee824e7 META.yml
+SHA1 750e891c1e9f666446e5998b5d1ebee33c5392bc Makefile.PL
+SHA1 c1c77bc7bf4a58437d4f166d5fdb8056bf905395 README
 SHA1 06c410f05488c1612ed66b06d3a86b2580581e4a inc/Module/AutoInstall.pm
 SHA1 8a924add836b60fb23b25c8506d45945e02f42f4 inc/Module/Install.pm
 SHA1 61ab1dd37e33ddbe155907ce51df8a3e56ac8bbf inc/Module/Install/AutoInstall.pm
@@ -28,11 +28,12 @@ SHA1 7328966e4fda0c8451a6d3850704da0b84ac1540 inc/Module/Install/Fetch.pm
 SHA1 66d3d335a03492583a3be121a7d888f63f08412c inc/Module/Install/Include.pm
 SHA1 b62ca5e2d58fa66766ccf4d64574f9e1a2250b34 inc/Module/Install/Makefile.pm
 SHA1 1aa925be410bb3bfcd84a16985921f66073cc1d2 inc/Module/Install/Metadata.pm
-SHA1 40df6f8d889b52eef379f04af6227f9302b23bf9 inc/Module/Install/RTx.pm
+SHA1 921e21851a8a1f28ba1c11c3003e2f407e2e4f44 inc/Module/Install/RTx.pm
+SHA1 dc94326a076aca41452c1d65bf52a255feeb9ef7 inc/Module/Install/ReadmeFromPod.pm
 SHA1 13c903897bad7f0fdd7871a4a0182ff62dfbefd5 inc/Module/Install/Substitute.pm
 SHA1 e4196994fa75e98bdfa2be0bdeeffef66de88171 inc/Module/Install/Win32.pm
 SHA1 c3a6d0d5b84feb3280622e9599e86247d58b0d18 inc/Module/Install/WriteAll.pm
-SHA1 51d9e10e6a3246694f784a625a16046f64114232 lib/RT/Extension/CommandByMail.pm
+SHA1 7baa282e2de3b84740c39750b36b7b0a5f5c6f0c lib/RT/Extension/CommandByMail.pm
 SHA1 0140773f010565116e6d931d346ac219d5924479 lib/RT/Extension/CommandByMail/Test.pm
 SHA1 ac224bc8ce45f8142c464f8c0be1aaed157a7d98 lib/RT/Interface/Email/Filter/TakeAction.pm
 SHA1 fba23bbc3a2d24ea2a544904396590a4b5700d33 t/create.t
@@ -40,9 +41,10 @@ SHA1 77205de650414cb7e6e2f23c827810bfa297126a t/internals.t
 SHA1 f6492d857343489fb65dfb174b3cbe0b981fd6a2 t/txn-cfs.t
 SHA1 e42510cc188df1bf9b9bd36d255d1b5652b91417 t/update.t
 -----BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.4.11 (GNU/Linux)
+Version: GnuPG v1.4.12 (Darwin)
+Comment: GPGTools - http://gpgtools.org
 
-iEYEARECAAYFAlJNvRsACgkQMflWJZZAbqCV8QCbB/Aj3qWJc7+AoaHvUgfcaHYL
-IwgAn3RLM8JOMVQ0V1cCQ4qnJP9THqRz
-=CYHd
+iEYEARECAAYFAlJqsRAACgkQ0+gKWp5CJQoSxwCgu/dPfPEqOMh2FzhX3e+Rptbr
+pJ4AnAi1I4dHJvszHR4PVR2DluNSqLTQ
+=wUWr
 -----END PGP SIGNATURE-----
