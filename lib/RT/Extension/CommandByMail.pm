@@ -1,7 +1,7 @@
 use 5.008003;
 package RT::Extension::CommandByMail;
 
-our $VERSION = '0.16';
+our $VERSION = '0.17';
 
 1;
 __END__
@@ -106,9 +106,20 @@ Ruslan U. Zakirov  C<< <ruz@bestpractical.com> >>
 Kevin Falcone C<< <falcone@bestpractical.com> >>
 Shawn Moore C<< <sartak@bestpractical.com> >>
 
+=head1 BUGS
+
+All bugs should be reported via email to
+
+    L<bug-RT-Extension-CommandByMail@rt.cpan.org|mailto:bug-RT-Extension-CommandByMail@rt.cpan.org>
+
+or via the web at
+
+    L<rt.cpan.org|http://rt.cpan.org/Public/Dist/Display.html?Name=RT-Extension-CommandByMail>.
+
+
 =head1 LICENCE AND COPYRIGHT
 
-Copyright (c) 2006-2013, Best Practical Solutions, LLC.  All rights reserved.
+Copyright (c) 2006-2014, Best Practical Solutions, LLC.  All rights reserved.
 
 This module is free software; you can redistribute it and/or
 modify it under the same terms as Perl itself. See L<perlartistic>.
